@@ -22,10 +22,6 @@ Visual snippets captured from a local static render of the app’s built UI stat
 
 ![Result screen](snippets/result.png)
 
-## Mobile layout
-
-![Mobile start screen](snippets/mobile_start.png)
-
 ## UI elements represented
 
 - Main start actions: **Random Match**, **Join Player**, and **Host**.
