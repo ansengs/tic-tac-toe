@@ -1,23 +1,16 @@
-# Tic-Tac-Toe Live Website/React App
+# Tic-Tac-Toe — GitHub Pages Version
 
-This package keeps the original multiplayer app behavior as the source of truth and serves it as a full live website with Express + Socket.IO.
-https://ansengs.github.io/tic-tac-toe
-
-## Run locally
-
-```bash
-npm install
-npm start
-```
-
-Open `http://localhost:3000` in two browser windows to test multiplayer.
+This package is built for GitHub Pages, which only serves static files.
 
 ## Deploy
 
-This project is ready for platforms that run a Node web service, including Render/Railway/Fly/Heroku-style hosts.
+1. Upload these files to your GitHub repository.
+2. Go to **Settings → Pages**.
+3. Set the source to your branch and root folder.
+4. Open the generated GitHub Pages URL.
 
-- Build command: `npm install`
-- Start command: `npm start`
-- Health check: `/healthz`
+## Important
 
-The frontend is served from `public/`, and Socket.IO runs on the same origin, so no separate frontend/backend URL setup is needed.
+The original app used an Express/Socket.IO server for real online multiplayer rooms. GitHub Pages cannot run a Node server, so this version keeps the same visual flow and playable tic-tac-toe behavior in a static site.
+
+For true online multiplayer, host the server version on Render/Railway/Fly.io/Vercel serverless-compatible backend and point the frontend to that backend.
