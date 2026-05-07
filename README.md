@@ -1,36 +1,57 @@
-# Tic-Tac-Toe Online — Built App Snippets
+# Tic-Tac-Toe Live Multiplayer Website
 
-Visual snippets captured from a local static render of the app’s built UI states. The repository describes the app as a real-time two-player Tic-Tac-Toe game using Express 5 and Socket.IO 4. Created in spring 2021, within 2 weeks, with no web development experience.
-https://ansengs.github.io/tic-tac-toe/
+A full live multiplayer Tic-Tac-Toe website built with React, Vite, Express, and Socket.IO. The site preserves the original app flow: random match, join player by room ID, host public/private rooms, leave, and start a new game.
 
-## Start screen
+## Local development
 
-![Start screen](snippets/start.png)
+```bash
+npm install
+npm run server
+```
 
-## Join room flow
+In a second terminal, run:
 
-![Join Room screen](snippets/join.png)
+```bash
+npm run dev
+```
 
-## Host room restriction
+Vite proxies Socket.IO traffic to the local server, so the dev site at `http://localhost:5173` still uses live multiplayer.
 
-![Host restriction screen](snippets/host.png)
+For a production-style local test:
 
-## Gameplay state
+```bash
+npm install
+npm run build
+npm start
+```
 
-![Gameplay screen](snippets/play.png)
+Then open `http://localhost:3000` in two browser windows to test multiplayer.
 
-## Result / new game prompt
+## Deploy as a live website
 
-![Result screen](snippets/result.png)
+This project is ready for a single full-stack host because the Express server serves the built React frontend and Socket.IO multiplayer from the same origin.
 
-## UI elements represented
+### Render
 
-- Main start actions: **Random Match**, **Join Player**, and **Host**.
-- Join form with room-id input.
-- Host restriction picker: **Private** / **Public**.
-- In-game room id, status text, side menu, and 3×3 board.
-- End-game result with **NEW GAME** confirmation.
+1. Upload this folder to GitHub.
+2. In Render, create a new **Web Service** from the repo.
+3. Render can use the included `render.yaml`, or use:
+   - Build command: `npm install && npm run build`
+   - Start command: `npm start`
+4. Open the Render URL in two browsers and use Random Match or Host/Join.
 
-## Repository run notes
+### Railway / Fly.io / Heroku-style hosts
 
-The repository README says to install dependencies with `npm install`, then run the server with `npm start` or `npm run dev`, and open `http://localhost:3000` in a browser.
+Use:
+
+```bash
+npm install && npm run build
+npm start
+```
+
+The app listens on `process.env.PORT`, so it works on platforms that assign a dynamic port.
+
+## Notes
+
+- Do not deploy only the `dist` folder; multiplayer needs the Node/Socket.IO server.
+- Static-only hosts such as basic GitHub Pages or Netlify static hosting will not support live multiplayer unless you also deploy the server separately.

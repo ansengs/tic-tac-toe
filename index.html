@@ -1,63 +1,12 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Tic-Tac-Toe</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js" defer></script>
-</head>
-<body>
-  <main class="main-bg">
-    <section id="tic-tac-toe-board" aria-label="Tic-Tac-Toe board">
-      <button class="box box0" data-index="0" aria-label="Top left square"></button>
-      <button class="box box1" data-index="1" aria-label="Top center square"></button>
-      <button class="box box2" data-index="2" aria-label="Top right square"></button>
-      <button class="box box3" data-index="3" aria-label="Middle left square"></button>
-      <button class="box box4" data-index="4" aria-label="Middle center square"></button>
-      <button class="box box5" data-index="5" aria-label="Middle right square"></button>
-      <button class="box box6" data-index="6" aria-label="Bottom left square"></button>
-      <button class="box box7" data-index="7" aria-label="Bottom center square"></button>
-      <button class="box box8" data-index="8" aria-label="Bottom right square"></button>
-    </section>
-
-    <nav class="start-menu container active-view" aria-label="Start menu">
-      <button id="start-menu-random-match" class="start-menu button random-match"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h4c2.4 0 3.3 2 4 5s1.6 5 4 5h4"/><path d="M17 4l3 3-3 3"/><path d="M17 14l3 3-3 3"/><path d="M4 17h3"/></svg><span>Random Match</span></button>
-      <button id="start-menu-join-player" class="start-menu button join"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h11"/><path d="M11 8l4 4-4 4"/><path d="M15 5h5v14h-5"/></svg><span>Join Player</span></button>
-      <button id="start-menu-host" class="start-menu button host"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16"/><path d="M4 12h16"/><rect x="5" y="5" width="14" height="14" rx="0"/></svg><span>Host</span></button>
-    </nav>
-
-    <nav class="side-menu container" aria-label="Side menu">
-      <button id="side-random-match" class="side-menu button random-match"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h4c2.4 0 3.3 2 4 5s1.6 5 4 5h4"/><path d="M17 4l3 3-3 3"/><path d="M17 14l3 3-3 3"/><path d="M4 17h3"/></svg><span>Random Match</span></button>
-      <button id="side-join-player" class="side-menu button join"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12h11"/><path d="M11 8l4 4-4 4"/><path d="M15 5h5v14h-5"/></svg><span>Join Player</span></button>
-      <button id="side-host" class="side-menu button host"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v16"/><path d="M4 12h16"/><rect x="5" y="5" width="14" height="14" rx="0"/></svg><span>Host</span></button>
-      <button id="side-leave" class="side-menu button leave"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5H5v14h9"/><path d="M10 12h10"/><path d="M16 8l4 4-4 4"/></svg><span>Leave</span></button>
-    </nav>
-
-    <button class="menu-button" aria-label="Toggle menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
-
-    <section class="join-room container" aria-label="Join room">
-      <h1 id="title-join-room" class="join-room">Join Room</h1>
-      <input type="text" id="input-room-id" class="join-room" autocomplete="off" placeholder="enter room id" maxlength="5" />
-    </section>
-
-    <section class="restriction container" aria-label="Room restriction">
-      <h1 class="restriction title">Room Restriction</h1>
-      <button class="restriction choice public"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M4 12h16"/><path d="M12 4c2 2.2 3 4.8 3 8s-1 5.8-3 8"/><path d="M12 4c-2 2.2-3 4.8-3 8s1 5.8 3 8"/></svg><span>Public</span></button>
-      <button class="restriction choice private"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="0"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><span>Private</span></button>
-    </section>
-
-    <section class="new-game container" aria-label="New game">
-      <h1 class="new-game title">NEW GAME</h1>
-      <div class="binary-choice container">
-        <button id="yes" class="binary-choice choice"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12l5 5L20 7"/></svg><span>Yes</span></button>
-        <button id="no" class="binary-choice choice"><svg class="btn-svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12"/><path d="M18 6L6 18"/></svg><span>No</span></button>
-      </div>
-    </section>
-
-    <span class="room-id" aria-live="polite"></span>
-    <span class="result" aria-live="polite"></span>
-    <span class="player-status" aria-live="polite"></span>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tic-Tac-Toe</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
