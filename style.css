@@ -26,19 +26,19 @@ button { appearance: none; }
 
 .button, .choice {
   border: 1px solid #050505; color: #050505; background: #fff; cursor: pointer; white-space: nowrap;
-  min-height: 46px; padding: .42em .95em; border-radius: 0; font-weight: 400; letter-spacing: -.02em;
-  box-shadow: none; filter: none; text-decoration: none;
+  min-height: 46px; padding: .42em .95em; border-radius: 14px; font-weight: 400; letter-spacing: -.02em;
+  box-shadow: 0 8px 22px rgba(0,0,0,.08); filter: none; text-decoration: none;
   display: inline-flex; align-items: center; justify-content: center; gap: .42em;
-  clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px);
+  box-shadow: 0 8px 22px rgba(0,0,0,.08);
   transition: background .14s ease, color .14s ease, transform .14s ease, opacity .14s ease;
 }
-.button:hover, .choice:hover { background: #050505; color: #fff; opacity: 1; transform: translateY(-1px); box-shadow: none; }
+.button:hover, .choice:hover { background: #050505; color: #fff; opacity: 1; transform: translateY(-1px); box-shadow: 0 8px 22px rgba(0,0,0,.08); }
 .button:active, .choice:active { transform: translateY(0); }
-.btn-svg { width: .82em; height: .82em; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: square; stroke-linejoin: miter; }
+.btn-svg { width: .82em; height: .82em; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .start-menu.button { width: 100%; height: 1.45em; font-size: 34px; }
 .side-menu.button { text-align: left; font-size: 24px; min-width: 230px; justify-content: flex-start; }
 
-.menu-button { position: absolute; z-index: 4; width: 42px; height: 42px; border: 1px solid #050505; border-radius: 0; background: #fff; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: none; clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px); }
+.menu-button { position: absolute; z-index: 4; width: 42px; height: 42px; border: 1px solid #050505; border-radius: 14px; background: #fff; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 8px 22px rgba(0,0,0,.08); box-shadow: 0 8px 22px rgba(0,0,0,.08); }
 .menu-button svg { width: 23px; height: 23px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: square; }
 .menu-button:hover { background: #050505; color: #fff; }
 
@@ -51,7 +51,7 @@ button { appearance: none; }
 .join-room.container { display: none; gap: 1.2em; grid-template-rows: auto auto; justify-content: center; align-content: center; max-width: 286px; top: 6.25%; left: 50%; transform: translate(-50%, -6.25%); }
 .join-room { text-align: center; font-weight: 300; color: #050505; }
 #title-join-room { margin: 0; font-size: 32px; height: 1.2em; }
-#input-room-id { font-size: 16px; border-radius: 0; height: 44px; border: 1px solid #050505; padding: 0 1.1em; outline: none; box-shadow: none; clip-path: polygon(7px 0, 100% 0, 100% calc(100% - 7px), calc(100% - 7px) 100%, 0 100%, 0 7px); }
+#input-room-id { font-size: 16px; border-radius: 14px; height: 44px; border: 1px solid #050505; padding: 0 1.1em; outline: none; box-shadow: 0 8px 22px rgba(0,0,0,.08); box-shadow: 0 8px 22px rgba(0,0,0,.08); }
 #input-room-id:focus { outline: 2px solid #050505; outline-offset: 3px; }
 #input-room-id.invalid { color: #a40000; border-color: #a40000; } #input-room-id.invalid::placeholder { color: #a40000; opacity: 1; }
 
@@ -59,7 +59,7 @@ button { appearance: none; }
 .new-game.container { top: 50%; left: 50%; transform: translate(-50%, -50%); display: none; flex-direction: column; align-items: center; justify-content: center; gap: 1.2em; z-index: 2; }
 .binary-choice.container { position: static; display: flex; gap: 6%; align-items: center; justify-content: center; }
 .binary-choice.choice { width: 5em; height: 2.3em; font-size: 20px; }
-.new-game.title { margin: 0; width: 6em; height: 1.35em; font-size: 42px; font-weight: 300; border: 1px solid #050505; background: #fff; color: #050505; line-height: 1.35; text-align: center; clip-path: polygon(8px 0, 100% 0, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0 100%, 0 8px); }
+.new-game.title { margin: 0; width: 6em; height: 1.35em; font-size: 42px; font-weight: 300; border: 1px solid #050505; background: #fff; color: #050505; line-height: 1.35; text-align: center; box-shadow: 0 8px 22px rgba(0,0,0,.08); }
 .player-status { position: absolute; max-width: 50%; left: 50%; top: 6.25%; transform: translate(-50%, -6.25%); font-size: 32px; white-space: nowrap; text-align: center; font-weight: 300; display: none; }
 .room-id { position: absolute; text-align: right; font-weight: 300; right: 0; width: auto; font-size: 24px; display: none; }
 
@@ -89,3 +89,5 @@ button { appearance: none; }
   #tic-tac-toe-board { width: 80vw; height: 80vw; min-width: 0; min-height: 0; max-width: 400px; max-height: 400px; left: 50%; top: 80%; transform: translate(-50%, -80%); }
   .room-id { font-size: 16px; }
 }
+
+.button:focus-visible, .choice:focus-visible, .menu-button:focus-visible, #input-room-id:focus-visible { outline: 3px solid rgba(0,0,0,.22); outline-offset: 3px; }
