@@ -1,6 +1,7 @@
 # Tic-Tac-Toe Online — Built App Snippets
 
-Visual snippets captured from a local static render of the app’s built UI states. The repository describes the app as a real-time two-player Tic-Tac-Toe game using Express 5 and Socket.IO 4.
+Visual snippets captured from a local static render of the app’s built UI states. The repository describes the app as a real-time two-player Tic-Tac-Toe game using Express 5 and Socket.IO 4. Created in spring 2021, within 2 weeks, with no web development experience.
+https://ansengs.github.io/tic-tac-toe/
 
 ## Start screen
 
