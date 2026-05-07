@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tic-Tac-Toe</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <main class="main-bg">
+    <section id="tic-tac-toe-board" aria-label="Tic-Tac-Toe board">
+      <button class="box box0" data-index="0" aria-label="Top left square"></button>
+      <button class="box box1" data-index="1" aria-label="Top center square"></button>
+      <button class="box box2" data-index="2" aria-label="Top right square"></button>
+      <button class="box box3" data-index="3" aria-label="Middle left square"></button>
+      <button class="box box4" data-index="4" aria-label="Middle center square"></button>
+      <button class="box box5" data-index="5" aria-label="Middle right square"></button>
+      <button class="box box6" data-index="6" aria-label="Bottom left square"></button>
+      <button class="box box7" data-index="7" aria-label="Bottom center square"></button>
+      <button class="box box8" data-index="8" aria-label="Bottom right square"></button>
+    </section>
+
+    <nav class="start-menu container active-view" aria-label="Start menu">
+      <button id="start-menu-random-match" class="start-menu button random-match">Random Match</button>
+      <button id="start-menu-join-player" class="start-menu button join">Join Player</button>
+      <button id="start-menu-host" class="start-menu button host">Host</button>
+    </nav>
+
+    <nav class="side-menu container" aria-label="Side menu">
+      <button id="side-random-match" class="side-menu button random-match">Random Match</button>
+      <button id="side-join-player" class="side-menu button join">Join Player</button>
+      <button id="side-host" class="side-menu button host">Host</button>
+      <button id="side-leave" class="side-menu button leave">Leave</button>
+    </nav>
+
+    <button class="menu-button" aria-label="Toggle menu"><span></span><span></span><span></span></button>
+
+    <section class="join-room container" aria-label="Join room">
+      <h1 id="title-join-room" class="join-room">Join Room</h1>
+      <input type="text" id="input-room-id" class="join-room" autocomplete="off" placeholder="enter room id" maxlength="5" />
+    </section>
+
+    <section class="restriction container" aria-label="Room restriction">
+      <h1 class="restriction title">Room Restriction</h1>
+      <button class="restriction choice public">Public</button>
+      <button class="restriction choice private">Private</button>
+    </section>
+
+    <section class="new-game container" aria-label="New game">
+      <h1 class="new-game title">NEW GAME</h1>
+      <div class="binary-choice container">
+        <button id="yes" class="binary-choice choice">Yes</button>
+        <button id="no" class="binary-choice choice">No</button>
+      </div>
+    </section>
+
+    <span class="room-id" aria-live="polite"></span>
+    <span class="result" aria-live="polite"></span>
+    <span class="player-status" aria-live="polite"></span>
+  </main>
+</body>
+</html>
