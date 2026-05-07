@@ -1,6 +1,7 @@
 # Tic-Tac-Toe — GitHub Pages Version
 
 This package is built for GitHub Pages, which only serves static files.
+https://ansengs.github.io/tic-tac-toe/
 
 ## Deploy
 
