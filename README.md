@@ -1,6 +1,7 @@
-# Tic-Tac-Toe Live Website
+# Tic-Tac-Toe Live Website/React App
 
 This package keeps the original multiplayer app behavior as the source of truth and serves it as a full live website with Express + Socket.IO.
+https://ansengs.github.io/tic-tac-toe
 
 ## Run locally
 
