@@ -1,9 +1,9 @@
 services:
   - type: web
-    name: tic-tac-toe-live-multiplayer
+    name: tic-tac-toe-live
     env: node
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: npm install
     startCommand: npm start
     healthCheckPath: /healthz
     envVars:

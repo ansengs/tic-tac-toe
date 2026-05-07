@@ -1,172 +1,162 @@
-import express from 'express';
-import { createServer } from 'node:http';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { Server } from 'socket.io';
+// server.js — Tic-Tac-Toe multiplayer server
+'use strict';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
+const express = require('express');
+const { createServer } = require('node:http');
+const { join } = require('node:path');
+const { Server } = require('socket.io');
+
 const app = express();
 const server = createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+const io = new Server(server);
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || '0.0.0.0';
+const PUBLIC_DIR = join(__dirname, 'public');
 const ROOM_ID_LENGTH = 5;
-const rooms = new Map();
 
-const emptyBoard = () => Array(9).fill(0);
-const createGame = (hostId, restriction) => ({
-  players: [hostId],
-  playerTurn: { mark: 'x', socketId: hostId },
-  board: emptyBoard(),
-  spacesLeft: 9,
-  inSession: false,
-  restriction,
-  newGameVotes: [],
+// Static files
+app.use(express.static(PUBLIC_DIR));
+
+app.get('/', (_req, res) => {
+    res.sendFile(join(PUBLIC_DIR, 'index.html'));
 });
 
-function isRoomId(value) {
-  return typeof value === 'string' && /^[A-Za-z0-9]{5}$/.test(value);
-}
+// Health check (useful when deployed behind a load balancer)
+app.get('/healthz', (_req, res) => res.status(200).send('ok'));
 
-function emitRoom(roomId) {
-  const game = rooms.get(roomId);
-  if (game) io.to(roomId).emit('game-state', { roomId, game });
-}
-
-function winner(board, spacesLeft) {
-  const lines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-  for (const [a,b,c] of lines) {
-    const total = board[a] + board[b] + board[c];
-    if (total === 3) return 'x';
-    if (total === -3) return 'o';
-  }
-  return spacesLeft === 0 ? 'cat' : null;
-}
-
-function endGame(roomId, result) {
-  const game = rooms.get(roomId);
-  if (!game) return;
-  game.inSession = false;
-  game.result = result;
-  game.newGameVotes = [];
-  io.to(roomId).emit('game-ended', { roomId, game, result });
-  emitRoom(roomId);
+/**
+ * Return true if the given room id is a game room (not an auto-joined per-socket room).
+ * Socket.IO auto-joins each socket to a room named by its own socket id; we exclude those.
+ */
+function isGameRoomId(roomId) {
+    return (
+        typeof roomId === 'string' &&
+        roomId.length === ROOM_ID_LENGTH &&
+        !io.sockets.sockets.has(roomId)
+    );
 }
 
 io.on('connection', (socket) => {
-  socket.on('host-room', ({ roomId, restriction }) => {
-    if (!isRoomId(roomId) || rooms.has(roomId)) {
-      socket.emit('host-result', { ok: false, reason: 'room-unavailable' });
-      return;
-    }
-    rooms.set(roomId, createGame(socket.id, restriction === 'private' ? 'private' : 'public'));
-    socket.join(roomId);
-    socket.data.roomId = roomId;
-    socket.emit('host-result', { ok: true, roomId });
-    emitRoom(roomId);
-  });
+    console.log(`[connect] ${socket.id}`);
 
-  socket.on('join-room', ({ roomId }) => {
-    const game = rooms.get(roomId);
-    if (!isRoomId(roomId) || !game || game.players.length >= 2) {
-      socket.emit('join-result', { ok: false, roomId });
-      return;
-    }
-    game.players.push(socket.id);
-    game.board = emptyBoard();
-    game.spacesLeft = 9;
-    game.playerTurn = { mark: 'x', socketId: game.players[0] };
-    game.inSession = true;
-    game.result = null;
-    game.newGameVotes = [];
-    socket.join(roomId);
-    socket.data.roomId = roomId;
-    socket.emit('join-result', { ok: true, roomId });
-    io.to(roomId).emit('player-joined', { roomId, playerId: socket.id });
-    emitRoom(roomId);
-  });
+    let currentRoomId = null;
+    let availableRooms = [];
 
-  socket.on('random-match', () => {
-    const available = [...rooms.entries()].find(([, game]) => game.restriction === 'public' && game.players.length === 1);
-    if (available) {
-      socket.emit('random-room-found', { roomId: available[0] });
-    } else {
-      socket.emit('random-room-found', { roomId: null });
-    }
-  });
+    socket.on('search-rooms', (availableRoom, userId, isRandomMatch, roomCount, numOfGameRooms) => {
+        // Initial search: find all game rooms that currently hold exactly one player
+        if (availableRoom == null) {
+            availableRooms = [];
+            const newRooms = [];
 
-  socket.on('make-move', ({ roomId, index }) => {
-    const game = rooms.get(roomId);
-    if (!game || !game.inSession || game.playerTurn.socketId !== socket.id) return;
-    if (!Number.isInteger(index) || index < 0 || index > 8 || game.board[index] !== 0) return;
+            for (const [roomId, sockets] of io.sockets.adapter.rooms) {
+                if (isGameRoomId(roomId) && sockets.size === 1) {
+                    newRooms.push(roomId);
+                }
+            }
 
-    game.board[index] = game.playerTurn.mark === 'x' ? 1 : -1;
-    game.spacesLeft -= 1;
-    const result = winner(game.board, game.spacesLeft);
-    if (result) {
-      endGame(roomId, result);
-      return;
-    }
+            numOfGameRooms = newRooms.length;
+            for (const searchRoom of newRooms) {
+                roomCount++;
+                // Ask the host of each room whether it's joinable under current restriction
+                io.to(searchRoom).emit(
+                    'search-rooms-restriction',
+                    searchRoom,
+                    userId,
+                    isRandomMatch,
+                    roomCount,
+                    numOfGameRooms,
+                );
+            }
 
-    const nextMark = game.playerTurn.mark === 'x' ? 'o' : 'x';
-    const nextPlayer = nextMark === 'x' ? game.players[0] : game.players[1];
-    game.playerTurn = { mark: nextMark, socketId: nextPlayer };
-    emitRoom(roomId);
-  });
+            if (newRooms.length === 0) {
+                io.to(userId).emit('room-available', null, isRandomMatch);
+            }
+            return;
+        }
 
-  socket.on('new-game-vote', ({ roomId }) => {
-    const game = rooms.get(roomId);
-    if (!game || !game.players.includes(socket.id)) return;
-    if (!game.newGameVotes.includes(socket.id)) game.newGameVotes.push(socket.id);
+        // Response phase: host replied with either a room id (joinable) or 'checked' (skip)
+        if (availableRoom !== 'checked') {
+            availableRooms.push(availableRoom);
+        }
 
-    if (game.players.length === 2 && game.newGameVotes.length === 2) {
-      game.board = emptyBoard();
-      game.spacesLeft = 9;
-      game.playerTurn = { mark: 'x', socketId: game.players[0] };
-      game.inSession = true;
-      game.result = null;
-      game.newGameVotes = [];
-    }
-    emitRoom(roomId);
-  });
+        if (roomCount === numOfGameRooms) {
+            const room = availableRooms.length > 0
+                ? availableRooms[Math.floor(Math.random() * availableRooms.length)]
+                : null;
+            io.to(userId).emit('room-available', room, isRandomMatch);
+            if (room) currentRoomId = room;
+        }
+    });
 
-  socket.on('leave-room', ({ roomId }) => {
-    leaveRoom(socket, roomId);
-  });
+    socket.on('data-update', ([data, roomId]) => {
+        io.to(roomId).emit('data-update', [data, roomId]);
+    });
 
-  socket.on('disconnect', () => {
-    if (socket.data.roomId) leaveRoom(socket, socket.data.roomId, true);
-  });
+    socket.on('new-game', (roomId, userId) => {
+        io.to(roomId).emit('new-game', roomId, userId);
+    });
+
+    socket.on('host', ([restriction, roomId]) => {
+        if (!isGameRoomId(roomId)) {
+            console.warn(`[host] rejected invalid room id: ${roomId}`);
+            return;
+        }
+        const gameData = {
+            players: [socket.id],
+            player_turn: { x: socket.id },
+            result: { null: null },
+            board: { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0 },
+            spaces_left: 9,
+            in_session: false,
+            restriction,
+        };
+        socket.join(roomId);
+        currentRoomId = roomId;
+        io.to(roomId).emit('data-update', [gameData, roomId]);
+        console.log(`[host]  ${socket.id} created room ${roomId} (${restriction})`);
+    });
+
+    socket.on('join-room', (roomId, userId) => {
+        // Verify the room exists server-side (don't trust client state)
+        const roomSockets = io.sockets.adapter.rooms.get(roomId);
+        const exists = isGameRoomId(roomId) && roomSockets && roomSockets.size >= 1;
+        if (exists) {
+            socket.join(roomId);
+            currentRoomId = roomId;
+            // Tell joiner first, then broadcast to the room so handler ordering is deterministic
+            socket.emit('join-room-result', { ok: true, roomId });
+            io.to(roomId).emit('player-joined', userId);
+            console.log(`[join]  ${userId} joined room ${roomId}`);
+        } else {
+            socket.emit('join-room-result', { ok: false, roomId, reason: 'not-found' });
+            console.log(`[join]  room ${roomId} does not exist`);
+        }
+    });
+
+    socket.on('disconnecting', () => {
+        if (currentRoomId) {
+            io.to(currentRoomId).emit('disconnected', socket.id);
+        }
+    });
+
+    socket.on('disconnect', (reason) => {
+        console.log(`[disconnect] ${socket.id} (${reason})`);
+    });
 });
 
-function leaveRoom(socket, roomId, disconnected = false) {
-  const game = rooms.get(roomId);
-  if (!game) return;
-  const wasPlayer = game.players.includes(socket.id);
-  game.players = game.players.filter((id) => id !== socket.id);
-  game.newGameVotes = game.newGameVotes.filter((id) => id !== socket.id);
-  socket.leave(roomId);
-  if (socket.data.roomId === roomId) socket.data.roomId = null;
-
-  if (game.players.length === 0) {
-    rooms.delete(roomId);
-    return;
-  }
-
-  if (wasPlayer) {
-    game.inSession = false;
-    game.playerTurn = { mark: 'x', socketId: game.players[0] };
-    game.result = disconnected ? 'opponent-disconnected' : 'opponent-left';
-    io.to(roomId).emit('opponent-left', { roomId, disconnected });
-  }
-  emitRoom(roomId);
+// Graceful shutdown so Ctrl+C in the terminal exits cleanly
+function shutdown(signal) {
+    console.log(`\n${signal} received. Shutting down...`);
+    io.close(() => {
+        server.close(() => process.exit(0));
+    });
+    // Force-exit after 5s if something hangs
+    setTimeout(() => process.exit(1), 5000).unref();
 }
-
-app.use(express.static(join(__dirname, 'dist')));
-app.get('/healthz', (_req, res) => res.status(200).send('ok'));
-app.get(/.*/, (_req, res) => res.sendFile(join(__dirname, 'dist', 'index.html')));
+process.on('SIGINT', () => shutdown('SIGINT'));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
 
 server.listen(PORT, HOST, () => {
-  console.log(`Tic-Tac-Toe React multiplayer running on http://localhost:${PORT}`);
+    console.log(`Tic-Tac-Toe server listening on http://localhost:${PORT}`);
 });

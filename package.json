@@ -1,30 +1,22 @@
 {
-  "name": "tic-tac-toe-live-multiplayer-site",
-  "version": "4.0.0",
+  "name": "tic-tac-toe-live-website-original-behavior",
+  "version": "5.0.0",
+  "description": "Live multiplayer Tic-Tac-Toe website matching the original app behavior with refined sleek styling.",
+  "main": "server.js",
   "private": true,
-  "type": "module",
-  "description": "A full live multiplayer Tic-Tac-Toe website built with React, Vite, Express, and Socket.IO.",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
-    "dev": "vite --host 0.0.0.0",
-    "dev:server": "NODE_ENV=development nodemon server.js",
-    "server": "node server.js",
-    "build": "vite build",
-    "preview": "vite preview --host 0.0.0.0",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   },
   "dependencies": {
-    "@vitejs/plugin-react": "latest",
-    "vite": "latest",
-    "react": "latest",
-    "react-dom": "latest",
     "express": "^5.2.1",
-    "socket.io": "^4.8.3",
-    "socket.io-client": "^4.8.3"
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
-    "nodemon": "latest"
-  },
-  "engines": {
-    "node": ">=20"
+    "nodemon": "^3.1.14"
   }
 }

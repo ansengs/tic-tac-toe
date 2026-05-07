@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic-Tac-Toe</title>
+    <link rel="stylesheet" type="text/css" id="applicationStylesheet" href="/css/tic_tac_toe.css" />
+    <script src="/socket.io/socket.io.js"></script>
+    <script
+        src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo="
+        crossorigin="anonymous"></script>
+    <script src="/js/tic_tac_toe.js" defer></script>
+</head>
+
+<body>
+
+    <div class="main-bg">
+        <div id="tic-tac-toe-board">
+            <div class="box0 box"></div>
+            <div class="box1 box"></div>
+            <div class="box2 box"></div>
+            <div class="box3 box"></div>
+            <div class="box4 box"></div>
+            <div class="box5 box"></div>
+            <div class="box6 box"></div>
+            <div class="box7 box"></div>
+            <div class="box8 box"></div>
+        </div>
+
+        <div class="start-menu container">
+            <span id="start-menu-random-match" class="start-menu button random-match">Random Match</span>
+            <span id="start-menu-join-player" class="start-menu button join">Join Player</span>
+            <span id="start-menu-host" class="start-menu button host">Host</span>
+        </div>
+
+        <div class="side-menu container">
+            <span id="side-random-match" class="side-menu button random-match">Random Match</span>
+            <span id="side-join-player" class="side-menu button join">Join Player</span>
+            <span id="side-host" class="side-menu button host">Host</span>
+            <span id="side-leave" class="side-menu button leave">Leave</span>
+        </div>
+
+        <button class="menu-button" aria-label="Toggle menu"></button>
+
+        <div class="join-room active container">
+            <span id="title-join-room" class="join-room active">Join Room</span>
+            <input type="text" id="input-room-id" class="join-room active" autocomplete="off" placeholder="enter room id" />
+        </div>
+
+        <div class="restriction active container">
+            <span class="restriction active title">Room Restriction</span>
+            <span class="restriction active choice private">Private</span>
+            <span class="restriction active choice public">Public</span>
+        </div>
+
+        <div class="new-game container">
+            <span class="new-game title">NEW GAME</span>
+            <div class="binary-choice active container">
+                <span id="yes" class="binary-choice active choice">Yes</span>
+                <span id="no" class="binary-choice active choice">No</span>
+            </div>
+        </div>
+
+        <span class="room-id"></span>
+        <span class="result active"></span>
+        <span class="player-status active"></span>
+
+    </div>
+</body>
+
+</html>
